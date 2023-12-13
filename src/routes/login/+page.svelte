@@ -17,5 +17,9 @@
   }
 </script>
 
-<h1 class="text-3xl font-bold mb-4">Login Page</h1>
-<Button on:click={loginWithGithub}>Login with Github</Button>
+<h1 class="font-semibold tracking-tight text-2xl mb-1">Login to Supagym</h1>
+<p class="text-neutral-300 text-sm">Sign in to your account</p>
+
+<div class="mt-6 flex flex-col">
+  <Button on:click={loginWithGithub}>Continue with Github</Button>
+</div>

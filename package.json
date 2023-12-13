@@ -9,7 +9,8 @@
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --check . && eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "gen-types": "supabase gen types typescript --local > src/lib/supabase.d.ts"
   },
   "devDependencies": {
     "@sveltejs/adapter-auto": "2.0.0",
@@ -33,6 +34,8 @@
   "type": "module",
   "dependencies": {
     "@supabase/auth-helpers-sveltekit": "0.10.7",
-    "@supabase/supabase-js": "2.39.0"
+    "@supabase/supabase-js": "2.39.0",
+    "zod": "3.22.4",
+    "sveltekit-superforms": "1.11.0"
   }
 }
