@@ -24,7 +24,7 @@ export async function load({ locals, params }) {
 
   const { data } = await locals.supabase
     .from("routines")
-    .select("name, description")
+    .select("name, goal")
     .eq("user_id", session.user.id)
     .eq("id", searchParams.data.routineId);
 
@@ -66,7 +66,7 @@ export const actions = {
       .from("routines")
       .update({
         name: form.data.name,
-        description: form.data.description,
+        goal: form.data.goal,
       })
       .eq("id", searchParams.data.routineId)
       .eq("user_id", session.user.id);

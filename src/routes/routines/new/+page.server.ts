@@ -34,7 +34,7 @@ export const actions = {
 
     const { error } = await locals.supabase.from("routines").insert({
       name: data.name,
-      description: data.description,
+      goal: data.goal,
       user_id: session.user.id,
     });
 

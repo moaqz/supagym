@@ -33,10 +33,10 @@
   />
 
   <TextArea
-    name="description"
-    label="Description"
-    bind:value={$form.description}
-    errors={$errors.description}
+    name="goal"
+    label="Goal"
+    bind:value={$form.goal}
+    errors={$errors.goal}
   />
 
   <div class="flex items-center gap-x-4">

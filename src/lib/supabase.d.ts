@@ -36,38 +36,38 @@ export interface Database {
     Tables: {
       exercises: {
         Row: {
+          comment: string | null;
           createdAt: string | null;
-          description: string | null;
           id: number;
           name: string;
-          repetitions: number;
+          reps: number;
           routine_id: number;
           sets: number;
           weight: number | null;
         };
         Insert: {
+          comment?: string | null;
           createdAt?: string | null;
-          description?: string | null;
           id?: number;
           name: string;
-          repetitions: number;
+          reps: number;
           routine_id: number;
           sets: number;
           weight?: number | null;
         };
         Update: {
+          comment?: string | null;
           createdAt?: string | null;
-          description?: string | null;
           id?: number;
           name?: string;
-          repetitions?: number;
+          reps?: number;
           routine_id?: number;
           sets?: number;
           weight?: number | null;
         };
         Relationships: [
           {
-            foreignKeyName: "exercises_routine_id_routines_id_fk";
+            foreignKeyName: "exercises_routine_id_fkey";
             columns: ["routine_id"];
             isOneToOne: false;
             referencedRelation: "routines";
@@ -78,21 +78,21 @@ export interface Database {
       routines: {
         Row: {
           createdAt: string | null;
-          description: string | null;
+          goal: string | null;
           id: number;
           name: string;
           user_id: string;
         };
         Insert: {
           createdAt?: string | null;
-          description?: string | null;
+          goal?: string | null;
           id?: number;
           name: string;
           user_id: string;
         };
         Update: {
           createdAt?: string | null;
-          description?: string | null;
+          goal?: string | null;
           id?: number;
           name?: string;
           user_id?: string;

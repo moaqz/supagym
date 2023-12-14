@@ -5,11 +5,10 @@ export const newRoutineSchema = z.object({
     .string()
     .min(1)
     .max(50, { message: "Routine name must be between 1 and 50 characters." }),
-  description: z
+  goal: z
     .string()
     .max(200, {
-      message:
-        "Routine description exceeds the maximum length of 200 characters.",
+      message: "Routine goal exceeds the maximum length of 200 characters.",
     })
     .nullable(),
 });
@@ -18,8 +17,12 @@ export type NewRoutine = typeof newRoutineSchema;
 
 export type Routine = {
   createdAt: string | null;
-  description: string | null;
+  goal: string | null;
   id: number;
-  title: string;
+  name: string;
   user_id: string;
 };
+
+export const searchParamsSchema = z.object({
+  routineId: z.coerce.number().positive(),
+});
