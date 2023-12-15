@@ -1,28 +1,26 @@
 import { z } from "zod";
 
-export const newRoutineSchema = z.object({
+export type Routine = {
+  id: number;
+  name: string;
+  goal: string | null;
+  user_id: string;
+  createdAt: string | null;
+};
+
+export const insertRoutineSchema = z.object({
   name: z
     .string()
-    .min(1)
-    .max(50, { message: "Routine name must be between 1 and 50 characters." }),
+    .trim()
+    .min(3, { message: "Routine name must contain at least 3 character(s)" })
+    .max(50, { message: "Routine name must contain at most 50 character(s)" }),
   goal: z
     .string()
-    .max(200, {
-      message: "Routine goal exceeds the maximum length of 200 characters.",
+    .trim()
+    .max(400, {
+      message: "Routine goal exceeds the maximum length of 400 characters.",
     })
     .nullable(),
 });
 
-export type NewRoutine = typeof newRoutineSchema;
-
-export type Routine = {
-  createdAt: string | null;
-  goal: string | null;
-  id: number;
-  name: string;
-  user_id: string;
-};
-
-export const searchParamsSchema = z.object({
-  routineId: z.coerce.number().positive(),
-});
+export type InsertRoutine = typeof insertRoutineSchema;

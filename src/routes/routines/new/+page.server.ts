@@ -1,4 +1,4 @@
-import { newRoutineSchema } from "$lib/schema/routine";
+import { insertRoutineSchema } from "$lib/schema/routine";
 import { fail, redirect } from "@sveltejs/kit";
 import { superValidate } from "sveltekit-superforms/server";
 
@@ -8,13 +8,12 @@ export async function load({ locals }) {
     throw redirect(307, "/login");
   }
 
-  const form = await superValidate(newRoutineSchema);
-
+  const form = await superValidate(insertRoutineSchema);
   return { form };
 }
 
 export const actions = {
-  default: async ({ locals, request }) => {
+  createRoutine: async ({ locals, request }) => {
     const session = await locals.getSession();
 
     if (!session) {
@@ -23,25 +22,27 @@ export const actions = {
       });
     }
 
-    const form = await superValidate(request, newRoutineSchema);
+    const form = await superValidate(request, insertRoutineSchema);
     if (!form.valid) {
       return fail(400, {
         form,
       });
     }
 
-    const { data } = form;
-
-    const { error } = await locals.supabase.from("routines").insert({
-      name: data.name,
-      goal: data.goal,
-      user_id: session.user.id,
-    });
+    const { error, data: routine } = await locals.supabase
+      .from("routines")
+      .insert({
+        name: form.data.name,
+        goal: form.data.goal,
+        user_id: session.user.id,
+      })
+      .select("id")
+      .single();
 
     if (error) {
       return fail(400, { form });
     }
 
-    return { form };
+    throw redirect(303, `/routines/${routine.id}`);
   },
 };

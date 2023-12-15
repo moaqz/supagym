@@ -1,4 +1,4 @@
-import { newRoutineSchema } from "$lib/schema/routine.js";
+import { insertRoutineSchema } from "$lib/schema/routine.js";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { superValidate } from "sveltekit-superforms/server";
 import { z } from "zod";
@@ -34,7 +34,7 @@ export async function load({ locals, params }) {
     });
   }
 
-  const form = await superValidate(data.at(0), newRoutineSchema);
+  const form = await superValidate(data.at(0), insertRoutineSchema);
   return { form };
 }
 
@@ -54,15 +54,14 @@ export const actions = {
       });
     }
 
-    const form = await superValidate(request, newRoutineSchema);
+    const form = await superValidate(request, insertRoutineSchema);
     if (!form.valid) {
       return fail(400, {
         form,
       });
     }
 
-    // TODO: handle errors
-    const {} = await locals.supabase
+    await locals.supabase
       .from("routines")
       .update({
         name: form.data.name,
@@ -88,7 +87,6 @@ export const actions = {
       });
     }
 
-    // TODO: handle errors
     await locals.supabase
       .from("routines")
       .delete()
