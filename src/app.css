@@ -19,4 +19,8 @@ body {
   .pretty {
     text-wrap: pretty;
   }
+
+  .balance {
+    text-wrap: balance;
+  }
 }

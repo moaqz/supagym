@@ -3,6 +3,7 @@
   import { goto, invalidate } from "$app/navigation";
   import { onMount } from "svelte";
   import Button from "$lib/components/button.svelte";
+  import { Toaster } from "svelte-sonner";
 
   export let data;
   $: ({ supabase, session } = data);
@@ -28,7 +29,7 @@
 <div
   class="max-w-2xl mx-auto min-h-screen shadow-md px-4 md:px-8 text-white bg-dark border-x border-x-neutral-800"
 >
-  <header class="h-16 flex items-center justify-between mb-8">
+  <header class="h-20 flex items-center justify-between mb-8">
     <a href="/" class="text-xl font-bold">Supagym</a>
 
     <div class="flex items-center space-x-3">
@@ -50,14 +51,11 @@
 
         <Button on:click={logout}>Sign out</Button>
       {:else}
+        <a href="/" class="hover:underline font-semibold"> Home </a>
         <a href="/login" class="hover:underline font-semibold"> Login </a>
-
-        <a
-          href="https://github.com/moaqz/supagym"
-          target="_blank"
-          class="hover:underline font-semibold"
-        >
-          Github
+        <span>|</span>
+        <a href="https://github.com/moaqz/supagym" target="_blank">
+          <img src="/github-mark-white.svg" alt="Github Logo" class="h-5 w-5" />
         </a>
       {/if}
     </div>
@@ -65,5 +63,6 @@
 
   <main>
     <slot />
+    <Toaster richColors closeButton />
   </main>
 </div>
