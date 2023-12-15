@@ -14,3 +14,9 @@ body {
     #09090b 50%
   );
 }
+
+@layer utilities {
+  .pretty {
+    text-wrap: pretty;
+  }
+}
