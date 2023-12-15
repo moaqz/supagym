@@ -1,25 +1,54 @@
 <script lang="ts">
   import Button from "$lib/components/button.svelte";
+  import Footer from "$lib/components/footer.svelte";
+  import type { Provider } from "@supabase/supabase-js";
+  import { toast } from "svelte-sonner";
 
   export let data;
 
-  async function loginWithGithub() {
+  let submitting = false;
+  let selectedProvider: Provider;
+
+  async function login(provider: Provider) {
+    submitting = true;
+    selectedProvider = provider;
+
     const { error } = await data.supabase.auth.signInWithOAuth({
-      provider: "github",
+      provider: provider,
       options: {
-        redirectTo: "/",
+        redirectTo: "/routines",
       },
     });
 
     if (error) {
-      // TODO:
+      toast.error("Unable to log in. Please try again later.");
     }
+
+    submitting = false;
   }
 </script>
 
 <h1 class="font-semibold tracking-tight text-2xl mb-1">Login to Supagym</h1>
 <p class="text-neutral-300 text-sm">Sign in to your account</p>
 
-<div class="mt-6 flex flex-col">
-  <Button on:click={loginWithGithub}>Continue with Github</Button>
+<div class="mt-6 flex flex-col gap-3">
+  <Button
+    on:click={() => login("github")}
+    loading={submitting && selectedProvider === "github"}
+    disabled={submitting}
+  >
+    <img src="/github-mark.svg" alt="Github Logo" class="h-5 w-5" />
+    Continue with Github
+  </Button>
+
+  <Button
+    on:click={() => login("google")}
+    loading={submitting && selectedProvider === "google"}
+    disabled={submitting}
+  >
+    <img src="/google-logo.svg" alt="Google Logo" class="h-5 w-5" />
+    Continue with Google
+  </Button>
 </div>
+
+<Footer />

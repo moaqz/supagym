@@ -4,7 +4,7 @@ export async function load({ locals }) {
   const session = await locals.getSession();
 
   if (session) {
-    throw redirect(307, "/");
+    throw redirect(307, "/routines");
   }
 
   return {};

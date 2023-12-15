@@ -45,7 +45,7 @@
     on:mouseleave
     {type}
     {...$$restProps}
-    disabled={loading ? true : undefined}
+    disabled={loading || $$restProps.disabled}
     class={buttonClass}
   >
     {#if loading}
