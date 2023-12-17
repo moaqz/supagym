@@ -9,7 +9,7 @@
 </script>
 
 <button
-  class="flex h-8 w-24 items-center justify-center rounded-md text-red-500 hover:bg-neutral-800 hover:transition-colors"
+  class="flex h-8 w-28 items-center justify-center rounded-md text-red-500 hover:bg-neutral-800 hover:transition-colors"
   on:click={() => dialogRef.showModal()}
 >
   Delete

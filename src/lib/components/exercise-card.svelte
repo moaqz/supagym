@@ -10,7 +10,7 @@
 >
   <div class="flex items-center justify-between">
     <p class="text-base font-medium text-neutral-200">{exercise.name}</p>
-    <ExerciseDropdownMenu routineId={exercise.routine_id} id={exercise.id} />
+    <ExerciseDropdownMenu {exercise} />
   </div>
 
   <ul class="flex items-center space-x-2 text-sm text-neutral-400">

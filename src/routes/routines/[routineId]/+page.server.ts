@@ -1,4 +1,5 @@
-import { deleteExerciseSchema } from "$lib/schema/exercise.js";
+import { deleteExerciseSchema } from "$lib/schema/exercise";
+import { createExerciseLogSchema } from "$lib/schema/exercise-log";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { z } from "zod";
 
@@ -35,7 +36,8 @@ export async function load({ locals, params }) {
   const exercises = await locals.supabase
     .from("exercises")
     .select("*")
-    .eq("routine_id", routineId);
+    .eq("routine_id", routineId)
+    .order("createdAt", { ascending: false });
 
   if (exercises.error) {
     throw error(404);
@@ -88,6 +90,49 @@ export const actions = {
     if (response.error) {
       return fail(500, {
         messsage: "Failed to delete the exercise. Please try again later",
+      });
+    }
+
+    return { success: true };
+  },
+  addExecution: async ({ locals, request }) => {
+    if (!locals.session) {
+      throw redirect(303, "/login");
+    }
+
+    const formData = await request.formData();
+    const form = createExerciseLogSchema.safeParse({
+      // @ts-ignore
+      routineId: parseInt(formData.get("routineId")),
+      // @ts-ignore
+      exerciseId: parseInt(formData.get("exerciseId")),
+    });
+
+    if (!form.success) {
+      return fail(400);
+    }
+
+    const routine = await locals.supabase
+      .from("routines")
+      .select("*")
+      .eq("user_id", locals.session.user.id)
+      .eq("id", form.data.routineId)
+      .single();
+
+    if (routine.error) {
+      return fail(404, {
+        message: "Routine not found",
+      });
+    }
+
+    const { error } = await locals.supabase.from("exercise_logs").insert({
+      exercise_id: form.data.exerciseId,
+      routine_id: form.data.routineId,
+    });
+
+    if (error) {
+      return fail(500, {
+        message: "Failed to log exercise completion. Please try again later.",
       });
     }
 

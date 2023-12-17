@@ -23,6 +23,12 @@
           <RoutineCard {routine} />
         </li>
       {/each}
+
+      <li
+        class="grid w-full place-content-center rounded-lg border border-dashed border-neutral-700 p-8"
+      >
+        <Button href="/routines/new">Create routine</Button>
+      </li>
     </ul>
   {:else}
     <EmptyState title="No routines" description="Create your first routine">

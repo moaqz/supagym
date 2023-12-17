@@ -1,9 +1,10 @@
 <script lang="ts">
   import MoreHorizontal from "$lib/icons/more-horizontal.svg";
+  import type { Exercise } from "$lib/schema/exercise";
+  import AddExecution from "./add-execution.svelte";
   import DeleteExerciseModal from "./delete-exercise-modal.svelte";
 
-  export let id: number;
-  export let routineId: number;
+  export let exercise: Exercise;
   let isDropdownOpen = false;
 
   function handleDropdownClick() {
@@ -41,14 +42,16 @@
     style:visibility={isDropdownOpen ? "visible" : "hidden"}
     class="absolute right-0 top-9 z-40 rounded-md border border-neutral-800 bg-dark p-1 text-sm font-medium text-white shadow-lg backdrop:bg-dark/80"
   >
-    <a href="/routines/{routineId}/exercises/edit?id={id}">
+    <a href="/routines/{exercise.routine_id}/exercises/edit?id={exercise.id}">
       <div
         role="menuitem"
-        class="flex h-8 w-24 items-center justify-center rounded-md hover:bg-neutral-800 hover:transition-colors"
+        class="flex h-8 w-28 items-center justify-center rounded-md hover:bg-neutral-800 hover:transition-colors"
       >
         Edit
       </div>
     </a>
+
+    <AddExecution {exercise} />
 
     <div
       role="separator"
@@ -56,6 +59,6 @@
       class="-mx-1 my-1 h-px bg-neutral-800"
     ></div>
 
-    <DeleteExerciseModal exerciseId={id} />
+    <DeleteExerciseModal exerciseId={exercise.id} />
   </div>
 </div>
