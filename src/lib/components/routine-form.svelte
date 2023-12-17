@@ -11,7 +11,6 @@
 
   const { form, enhance, errors, submitting } = superForm(data, {
     validators: insertRoutineSchema,
-    delayMs: 1000,
   });
 </script>
 

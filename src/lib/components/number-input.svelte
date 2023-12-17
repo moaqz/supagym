@@ -19,19 +19,19 @@
 
 <div class="space-y-1">
   <label>
-    <span class="text-sm font-medium block mb-1">{label}</span>
+    <span class="mb-1 block text-sm font-medium">{label}</span>
     <div class="flex items-center">
       <button
         type="button"
         on:click={decrement}
-        class="border border-gray-800 rounded-l-md h-10 px-4 font-bold"
+        class="h-10 rounded-l-md border border-gray-800 px-4 font-bold"
       >
         -
       </button>
       <input
         type="number"
         min="0"
-        class="h-10 px-3 py-2 w-full bg-transparent border-y border-y-gray-800 outline-none"
+        class="h-10 w-full border-y border-y-gray-800 bg-transparent px-3 py-2 outline-none"
         aria-invalid={errors ? "true" : undefined}
         bind:value
         {...constraints}
@@ -40,7 +40,7 @@
       <button
         type="button"
         on:click={increment}
-        class="border border-gray-800 rounded-r-md h-10 px-4 font-bold"
+        class="h-10 rounded-r-md border border-gray-800 px-4 font-bold"
       >
         +
       </button>
@@ -48,7 +48,7 @@
   </label>
 
   {#if errors}
-    <small class="block text-red-400 font-semibold text-sm">
+    <small class="block text-sm font-semibold text-red-400">
       {errors}
     </small>
   {/if}

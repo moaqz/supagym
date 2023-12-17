@@ -9,10 +9,10 @@
 
 <div class="space-y-1">
   <label>
-    <span class="text-sm font-medium block mb-1">{label}</span>
+    <span class="mb-1 block text-sm font-medium">{label}</span>
     <input
       type="text"
-      class="h-10 px-3 py-2 rounded-md block w-full bg-transparent border border-gray-800 focus:outline-1 focus:outline-offset-2 focus:outline-double focus:outline-gray-600"
+      class="block h-10 w-full rounded-md border border-gray-800 bg-transparent px-3 py-2 focus:outline-double focus:outline-1 focus:outline-offset-2 focus:outline-gray-600"
       bind:value
       aria-invalid={errors ? "true" : undefined}
       {...constraints}
@@ -21,7 +21,7 @@
   </label>
 
   {#if errors}
-    <small class="block text-red-400 font-semibold text-sm">
+    <small class="block text-sm font-semibold text-red-400">
       {errors}
     </small>
   {/if}

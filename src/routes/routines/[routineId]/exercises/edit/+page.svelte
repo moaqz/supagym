@@ -5,9 +5,9 @@
   export let data: PageData;
 </script>
 
-<div class="space-y-1 mb-8">
-  <h1 class="font-semibold tracking-tight text-2xl">Exercise</h1>
-  <p class="text-neutral-300 text-sm">
+<div class="mb-8 space-y-1">
+  <h1 class="text-2xl font-semibold tracking-tight">Exercise</h1>
+  <p class="text-sm text-neutral-300">
     {#if data.exercise}
       Update your exercise
     {:else}

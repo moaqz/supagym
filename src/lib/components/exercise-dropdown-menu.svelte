@@ -28,7 +28,7 @@
 
 <div class="relative" on:focusout={handleDropdownFocusLoss}>
   <button
-    class="h-8 w-8 grid place-content-center rounded-md hover:transition-colors hover:bg-neutral-800"
+    class="grid h-8 w-8 place-content-center rounded-md hover:bg-neutral-800 hover:transition-colors"
     on:click={handleDropdownClick}
   >
     <svg class="h-6 w-6">
@@ -39,12 +39,12 @@
   <div
     role="menu"
     style:visibility={isDropdownOpen ? "visible" : "hidden"}
-    class="z-40 absolute right-0 top-9 p-1 bg-dark text-white text-sm font-medium border border-neutral-800 shadow-lg rounded-md backdrop:bg-dark/80"
+    class="absolute right-0 top-9 z-40 rounded-md border border-neutral-800 bg-dark p-1 text-sm font-medium text-white shadow-lg backdrop:bg-dark/80"
   >
     <a href="/routines/{routineId}/exercises/edit?id={id}">
       <div
         role="menuitem"
-        class="w-24 h-8 flex items-center justify-center hover:bg-neutral-800 rounded-md hover:transition-colors"
+        class="flex h-8 w-24 items-center justify-center rounded-md hover:bg-neutral-800 hover:transition-colors"
       >
         Edit
       </div>
@@ -53,7 +53,7 @@
     <div
       role="separator"
       aria-orientation="horizontal"
-      class="bg-neutral-800 -mx-1 my-1 h-px"
+      class="-mx-1 my-1 h-px bg-neutral-800"
     ></div>
 
     <DeleteExerciseModal exerciseId={id} />

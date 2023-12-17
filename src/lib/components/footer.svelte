@@ -1,5 +1,5 @@
 <footer class="fixed bottom-6">
-  <div class="flex items-center gap-2 font-semibold text-xl tracking-tight">
+  <div class="flex items-center gap-2 text-xl font-semibold tracking-tight">
     Built with
     <a target="_blank" href="https://svelte.dev">
       <img src="/svelte-logo.svg" alt="Svelte logo" class="h-7 w-7" />

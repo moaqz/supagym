@@ -27,9 +27,9 @@
 </script>
 
 <div
-  class="max-w-2xl mx-auto min-h-screen shadow-md px-4 md:px-8 text-white bg-dark border-x border-x-neutral-800"
+  class="mx-auto min-h-screen max-w-2xl border-x border-x-neutral-800 bg-dark px-4 text-white shadow-md md:px-8"
 >
-  <header class="h-20 flex items-center justify-between mb-8">
+  <header class="mb-8 flex h-20 items-center justify-between">
     <a href="/" class="text-xl font-bold">Supagym</a>
 
     <div class="flex items-center space-x-3">
@@ -42,7 +42,7 @@
             alt="Profile picture of {data.session.user.user_metadata.user_name}"
           />
 
-          <span class="font-medium hidden sm:block">
+          <span class="hidden font-medium sm:block">
             {data.session.user.user_metadata.user_name}
           </span>
         </div>
@@ -51,8 +51,8 @@
 
         <Button on:click={logout}>Sign out</Button>
       {:else}
-        <a href="/" class="hover:underline font-semibold"> Home </a>
-        <a href="/login" class="hover:underline font-semibold"> Login </a>
+        <a href="/" class="font-semibold hover:underline"> Home </a>
+        <a href="/login" class="font-semibold hover:underline"> Login </a>
         <span>|</span>
         <a href="https://github.com/moaqz/supagym" target="_blank">
           <img src="/github-mark-white.svg" alt="Github Logo" class="h-5 w-5" />

@@ -5,9 +5,9 @@
   export let data: PageData;
 </script>
 
-<div class="space-y-1 mb-8">
-  <h1 class="font-semibold tracking-tight text-2xl">Routine</h1>
-  <p class="text-neutral-300 text-sm">Create your routine</p>
+<div class="mb-8 space-y-1">
+  <h1 class="text-2xl font-semibold tracking-tight">Routine</h1>
+  <p class="text-sm text-neutral-300">Create your routine</p>
 </div>
 
 <RoutineForm action="createRoutine" data={data.form} />

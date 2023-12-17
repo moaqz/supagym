@@ -9,7 +9,7 @@
 </script>
 
 <button
-  class="w-24 h-8 flex items-center justify-center hover:bg-neutral-800 hover:transition-colors rounded-md text-red-500"
+  class="flex h-8 w-24 items-center justify-center rounded-md text-red-500 hover:bg-neutral-800 hover:transition-colors"
   on:click={() => dialogRef.showModal()}
 >
   Delete
@@ -17,10 +17,10 @@
 
 <dialog
   bind:this={dialogRef}
-  class="bg-dark text-white border border-neutral-800 shadow-lg rounded-lg backdrop:bg-dark/80 p-6 space-y-4"
+  class="space-y-4 rounded-lg border border-neutral-800 bg-dark p-6 text-white shadow-lg backdrop:bg-dark/80"
 >
-  <h3 class="font-semibold tracking-tight text-xl">Are you absolutely sure?</h3>
-  <p class="text-neutral-300 text-sm">
+  <h3 class="text-xl font-semibold tracking-tight">Are you absolutely sure?</h3>
+  <p class="text-sm text-neutral-300">
     This action cannot be undone. This will permanently delete the exercise.
   </p>
 

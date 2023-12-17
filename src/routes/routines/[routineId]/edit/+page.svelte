@@ -8,8 +8,8 @@
 
 <div class="mb-8 flex items-center justify-between">
   <div class="space-y-1">
-    <h1 class="font-semibold tracking-tight text-2xl">Routine</h1>
-    <p class="text-neutral-300 text-sm">Update your routine</p>
+    <h1 class="text-2xl font-semibold tracking-tight">Routine</h1>
+    <p class="text-sm text-neutral-300">Update your routine</p>
   </div>
 
   <DeleteRoutineModal />

@@ -8,13 +8,13 @@
 </script>
 
 <div
-  class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between pb-2 mb-6"
+  class="mb-6 flex flex-col gap-4 pb-2 md:flex-row md:items-center md:justify-between"
 >
   <div>
-    <h1 class="font-semibold tracking-tight text-2xl">{data.routine?.name}</h1>
+    <h1 class="text-2xl font-semibold tracking-tight">{data.routine?.name}</h1>
 
     {#if data.routine?.goal}
-      <p class="text-neutral-300 pretty">{data.routine.goal}</p>
+      <p class="pretty text-neutral-300">{data.routine.goal}</p>
     {/if}
   </div>
 
@@ -31,7 +31,7 @@
     {/each}
 
     <div
-      class="grid place-content-center w-full rounded-lg border border-neutral-700 border-dashed p-8"
+      class="grid w-full place-content-center rounded-lg border border-dashed border-neutral-700 p-8"
     >
       <Button href="/routines/{data.routine.id}/exercises/edit">
         Create exercise

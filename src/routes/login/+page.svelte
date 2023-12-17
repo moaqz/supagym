@@ -28,8 +28,8 @@
   }
 </script>
 
-<h1 class="font-semibold tracking-tight text-2xl mb-1">Login to Supagym</h1>
-<p class="text-neutral-300 text-sm">Sign in to your account</p>
+<h1 class="mb-1 text-2xl font-semibold tracking-tight">Login to Supagym</h1>
+<p class="text-sm text-neutral-300">Sign in to your account</p>
 
 <div class="mt-6 flex flex-col gap-3">
   <Button

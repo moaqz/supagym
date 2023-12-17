@@ -6,14 +6,14 @@
 </script>
 
 <div
-  class="flex flex-col justify-between gap-2 p-4 border border-neutral-800 rounded-lg"
+  class="flex flex-col justify-between gap-2 rounded-lg border border-neutral-800 p-4"
 >
   <div class="flex items-center justify-between">
     <p class="text-base font-medium text-neutral-200">{exercise.name}</p>
     <ExerciseDropdownMenu routineId={exercise.routine_id} id={exercise.id} />
   </div>
 
-  <ul class="flex items-center space-x-2 text-neutral-400 text-sm">
+  <ul class="flex items-center space-x-2 text-sm text-neutral-400">
     <li class="flex items-center gap-0.5">
       {exercise.reps} Repetitions
     </li>

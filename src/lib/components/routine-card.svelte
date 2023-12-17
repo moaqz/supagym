@@ -7,11 +7,11 @@
 
 <a
   href="/routines/{routine.id}"
-  class="flex justify-between gap-4 p-4 border border-neutral-800 rounded-lg group hover:bg-neutral-800 hover:transition-colors"
+  class="group flex justify-between gap-4 rounded-lg border border-neutral-800 p-4 hover:bg-neutral-800 hover:transition-colors"
 >
   <div>
     <h4 class="text-base text-neutral-200">{routine.name}</h4>
-    <p class="text-sm text-neutral-400 line-clamp-3">
+    <p class="line-clamp-3 text-sm text-neutral-400">
       {#if routine.goal}
         {routine.goal}
       {:else}

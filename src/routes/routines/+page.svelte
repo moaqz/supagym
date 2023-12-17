@@ -6,9 +6,9 @@
   export let data;
 </script>
 
-<div class="flex items-center justify-between mb-6">
+<div class="mb-6 flex items-center justify-between">
   <div>
-    <h1 class="font-semibold tracking-tight text-2xl">Routines</h1>
+    <h1 class="text-2xl font-semibold tracking-tight">Routines</h1>
     <p class="text-neutral-300">Overview of all your routines.</p>
   </div>
 
