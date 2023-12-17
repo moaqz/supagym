@@ -75,7 +75,7 @@ export const actions = {
   deleteRoutine: async ({ locals, params }) => {
     const searchParams = searchParamsSchema.safeParse(params);
     if (!searchParams.success) {
-      throw error(404, {
+      return fail(404, {
         message: "Routine not found",
       });
     }
@@ -87,12 +87,18 @@ export const actions = {
       });
     }
 
-    await locals.supabase
+    const { error } = await locals.supabase
       .from("routines")
       .delete()
       .eq("id", searchParams.data.routineId)
       .eq("user_id", session.user.id);
 
-    throw redirect(301, "/routines");
+    if (error) {
+      return fail(500, {
+        message: "Something went wrong!",
+      });
+    }
+
+    if (error) throw redirect(301, "/routines");
   },
 };

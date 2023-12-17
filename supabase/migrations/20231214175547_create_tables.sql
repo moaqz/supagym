@@ -9,13 +9,14 @@ CREATE TABLE IF NOT EXISTS "routines" (
 CREATE TABLE IF NOT EXISTS "exercises" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"name" text NOT NULL,
-	"comment" text,
 	"sets" integer NOT NULL,
 	"reps" integer NOT NULL,
-	"weight" numeric,
+	"weight" integer NOT NULL,
 	"routine_id" integer NOT NULL REFERENCES "routines"("id"),
+	"user_id" uuid NOT NULL,
 	"createdAt" timestamp with time zone DEFAULT now()
 );
 
 CREATE INDEX IF NOT EXISTS "exercises_routine_idx" ON "exercises" ("routine_id");
 CREATE INDEX IF NOT EXISTS "routines_user_idx" ON "routines" ("user_id");
+CREATE INDEX IF NOT EXISTS "exercises_user_id_idx" ON "exercises" ("user_id");
