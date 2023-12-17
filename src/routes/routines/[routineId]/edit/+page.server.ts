@@ -98,6 +98,6 @@ export const actions = {
       });
     }
 
-    return { success: true };
+    throw redirect(307, "/routines");
   },
 };

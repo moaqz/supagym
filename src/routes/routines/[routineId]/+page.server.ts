@@ -74,7 +74,7 @@ export const actions = {
     const routine = await locals.supabase
       .from("routines")
       .select("id, user_id")
-      .eq("id", 8)
+      .eq("id", form.data.routineId)
       .eq("user_id", locals.session.user.id)
       .single();
 

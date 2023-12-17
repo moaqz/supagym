@@ -39,10 +39,6 @@
           await update();
           deleting = false;
 
-          if (result.type === "success") {
-            toast.success("Deleted successfully");
-          }
-
           if (result.type === "failure") {
             toast.error("Something went wrong", {
               description: "Please try again",
@@ -50,8 +46,6 @@
           }
 
           closeModal();
-
-          goto("/routines");
         };
       }}
     >
