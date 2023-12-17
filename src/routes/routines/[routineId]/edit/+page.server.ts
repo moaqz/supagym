@@ -1,6 +1,6 @@
 import { insertRoutineSchema } from "$lib/schema/routine.js";
 import { error, fail, redirect } from "@sveltejs/kit";
-import { superValidate } from "sveltekit-superforms/server";
+import { message, superValidate } from "sveltekit-superforms/server";
 import { z } from "zod";
 
 const searchParamsSchema = z.object({
@@ -8,6 +8,10 @@ const searchParamsSchema = z.object({
 });
 
 export async function load({ locals, params }) {
+  if (!locals.session) {
+    throw redirect(303, "/login");
+  }
+
   const searchParams = searchParamsSchema.safeParse(params);
   if (!searchParams.success) {
     throw error(404, {
@@ -15,31 +19,35 @@ export async function load({ locals, params }) {
     });
   }
 
-  const session = await locals.getSession();
-  if (!session) {
-    throw error(401, {
-      message: "You must be logged in to edit a routine",
-    });
-  }
-
-  const { data } = await locals.supabase
+  const routine = await locals.supabase
     .from("routines")
     .select("name, goal")
-    .eq("user_id", session.user.id)
-    .eq("id", searchParams.data.routineId);
+    .eq("user_id", locals.session.user.id)
+    .eq("id", searchParams.data.routineId)
+    .single();
 
-  if (!data || data.length <= 0) {
+  if (routine.error || !routine.data) {
     throw error(404, {
       message: "Routine not found",
     });
   }
 
-  const form = await superValidate(data.at(0), insertRoutineSchema);
-  return { form };
+  return {
+    form: await superValidate(routine.data, insertRoutineSchema),
+  };
 }
 
 export const actions = {
   updateRoutine: async ({ locals, request, params }) => {
+    if (!locals.session) {
+      throw redirect(303, "/login");
+    }
+
+    const form = await superValidate(request, insertRoutineSchema);
+    if (!form.valid) {
+      return fail(400, { form });
+    }
+
     const searchParams = searchParamsSchema.safeParse(params);
     if (!searchParams.success) {
       throw error(404, {
@@ -47,58 +55,49 @@ export const actions = {
       });
     }
 
-    const session = await locals.getSession();
-    if (!session) {
-      return fail(401, {
-        message: "You must be logged in to update a routine",
-      });
-    }
-
-    const form = await superValidate(request, insertRoutineSchema);
-    if (!form.valid) {
-      return fail(400, {
-        form,
-      });
-    }
-
-    await locals.supabase
+    const routine = await locals.supabase
       .from("routines")
       .update({
         name: form.data.name,
         goal: form.data.goal,
       })
       .eq("id", searchParams.data.routineId)
-      .eq("user_id", session.user.id);
+      .eq("user_id", locals.session.user.id);
+
+    if (routine.error) {
+      return message(
+        form,
+        "Failed to update routine. Please try again later.",
+        { status: 500 },
+      );
+    }
 
     return { form };
   },
   deleteRoutine: async ({ locals, params }) => {
+    if (!locals.session) {
+      throw redirect(303, "/login");
+    }
+
     const searchParams = searchParamsSchema.safeParse(params);
     if (!searchParams.success) {
-      return fail(404, {
+      throw error(404, {
         message: "Routine not found",
       });
     }
 
-    const session = await locals.getSession();
-    if (!session) {
-      return fail(401, {
-        message: "You must be logged in to update a routine",
-      });
-    }
-
-    const { error } = await locals.supabase
+    const response = await locals.supabase
       .from("routines")
       .delete()
       .eq("id", searchParams.data.routineId)
-      .eq("user_id", session.user.id);
+      .eq("user_id", locals.session.user.id);
 
-    if (error) {
+    if (response.error) {
       return fail(500, {
-        message: "Something went wrong!",
+        message: "Failed to delete routine. Please try again later.",
       });
     }
 
-    if (error) throw redirect(301, "/routines");
+    return { success: true };
   },
 };

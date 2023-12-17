@@ -1,25 +1,21 @@
 import { insertRoutineSchema } from "$lib/schema/routine";
 import { fail, redirect } from "@sveltejs/kit";
-import { superValidate } from "sveltekit-superforms/server";
+import { message, superValidate } from "sveltekit-superforms/server";
 
 export async function load({ locals }) {
-  const session = await locals.getSession();
-  if (!session) {
-    throw redirect(307, "/login");
+  if (!locals.session) {
+    throw redirect(303, "/login");
   }
 
-  const form = await superValidate(insertRoutineSchema);
-  return { form };
+  return {
+    form: await superValidate(insertRoutineSchema),
+  };
 }
 
 export const actions = {
   createRoutine: async ({ locals, request }) => {
-    const session = await locals.getSession();
-
-    if (!session) {
-      return fail(401, {
-        message: "You must be logged in to create a routine.",
-      });
+    if (!locals.session) {
+      throw redirect(303, "/login");
     }
 
     const form = await superValidate(request, insertRoutineSchema);
@@ -34,13 +30,17 @@ export const actions = {
       .insert({
         name: form.data.name,
         goal: form.data.goal,
-        user_id: session.user.id,
+        user_id: locals.session.user.id,
       })
       .select("id")
       .single();
 
     if (error) {
-      return fail(400, { form });
+      return message(
+        form,
+        "Failed to create routine. Please try again later.",
+        { status: 500 },
+      );
     }
 
     throw redirect(303, `/routines/${routine.id}`);

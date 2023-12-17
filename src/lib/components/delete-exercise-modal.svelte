@@ -46,6 +46,8 @@
               description: "Please try again",
             });
           }
+
+          dialogRef.close();
         };
       }}
     >

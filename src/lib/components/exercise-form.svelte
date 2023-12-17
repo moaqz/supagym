@@ -19,14 +19,17 @@
     validators:
       action === "createExercise" ? createExerciseSchema : updateExerciseSchema,
     onResult(event) {
-      if (event.result.type === "redirect") {
-        toast.success("Saved successfully");
-      }
-
       if (event.result.type === "failure") {
         toast.error("Something went wrong!", {
           description: "Please try again",
         });
+      }
+
+      if (
+        event.result.type === "redirect" &&
+        event.result.location.startsWith("/routines")
+      ) {
+        toast.success("Saved successfully");
       }
     },
   });

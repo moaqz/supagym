@@ -1,6 +1,8 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
   import Button from "./button.svelte";
+  import { toast } from "svelte-sonner";
+  import { goto } from "$app/navigation";
 
   let dialogRef: HTMLDialogElement | null;
   let deleting = false;
@@ -33,9 +35,23 @@
       use:enhance={() => {
         deleting = true;
 
-        return async ({ update }) => {
+        return async ({ update, result }) => {
           await update();
           deleting = false;
+
+          if (result.type === "success") {
+            toast.success("Deleted successfully");
+          }
+
+          if (result.type === "failure") {
+            toast.error("Something went wrong", {
+              description: "Please try again",
+            });
+          }
+
+          closeModal();
+
+          goto("/routines");
         };
       }}
     >

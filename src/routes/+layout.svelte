@@ -26,6 +26,14 @@
   }
 </script>
 
+<svelte:head>
+  <title>Supagym</title>
+  <meta
+    name="description"
+    content="Plan, log, and manage your workout sessions. Keep a detailed record of your exercises to stay motivated and achieve your fitness goals."
+  />
+</svelte:head>
+
 <div
   class="mx-auto min-h-screen max-w-2xl border-x border-x-neutral-800 bg-dark px-4 text-white shadow-md md:px-8"
 >

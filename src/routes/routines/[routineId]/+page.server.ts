@@ -7,9 +7,8 @@ const searchParamsSchema = z.object({
 });
 
 export async function load({ locals, params }) {
-  const session = await locals.getSession();
-  if (!session) {
-    throw redirect(307, "/login");
+  if (!locals.session) {
+    throw redirect(303, "/login");
   }
 
   const searchParams = searchParamsSchema.safeParse(params);
@@ -19,43 +18,42 @@ export async function load({ locals, params }) {
     });
   }
 
-  const { data: routine, error: supabaseError } = await locals.supabase
+  const routineId = searchParams.data.routineId;
+  const userId = locals.session.user.id;
+
+  const routine = await locals.supabase
     .from("routines")
     .select("*")
-    .eq("user_id", session.user.id)
-    .eq("id", searchParams.data.routineId)
+    .eq("user_id", userId)
+    .eq("id", routineId)
     .single();
 
-  if (supabaseError) {
-    throw error(404, {
-      message: "Routine not found",
-    });
+  if (routine.error || !routine.data) {
+    throw error(404);
   }
 
   const exercises = await locals.supabase
     .from("exercises")
     .select("*")
-    .eq("routine_id", searchParams.data.routineId);
+    .eq("routine_id", routineId);
 
   if (exercises.error) {
-    throw error(404, {
-      message: "Exercises not found",
-    });
+    throw error(404);
   }
 
-  return { routine, exercises: exercises.data };
+  return {
+    routine: routine.data,
+    exercises: exercises.data,
+  };
 }
 
 export const actions = {
   deleteExercise: async ({ locals, request, params }) => {
-    const session = await locals.getSession();
-    if (!session) {
-      return fail(401, {
-        message: "You must be logged in.",
-      });
+    if (!locals.session) {
+      throw redirect(303, "/login");
     }
 
-    let exerciseId = (await request.formData()).get("exerciseId");
+    const exerciseId = (await request.formData()).get("exerciseId");
     if (!exerciseId || exerciseId instanceof File) {
       return fail(400);
     }
@@ -66,37 +64,30 @@ export const actions = {
     });
 
     if (!form.success) {
-      return fail(400);
+      return fail(400, {
+        message: "Missing required fields",
+      });
     }
 
     const routine = await locals.supabase
       .from("routines")
       .select("id, user_id")
-      .eq("id", form.data.routineId)
+      .eq("id", 8)
+      .eq("user_id", locals.session.user.id)
       .single();
 
     if (routine.error) {
-      return fail(500, {
-        message: "Something went wrong! Could not update the exercise",
-        form,
-      });
+      return fail(404);
     }
 
-    if (!(routine.data.user_id === session.user.id)) {
-      return fail(401, {
-        message: "You don't have access to this resource",
-        form,
-      });
-    }
-
-    const { error } = await locals.supabase
+    const response = await locals.supabase
       .from("exercises")
       .delete()
       .eq("id", form.data.exerciseId);
 
-    if (error) {
+    if (response.error) {
       return fail(500, {
-        messsage: "Something went wrong!",
+        messsage: "Failed to delete the exercise. Please try again later",
       });
     }
 

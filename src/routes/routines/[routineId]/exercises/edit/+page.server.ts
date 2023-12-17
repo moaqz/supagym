@@ -7,49 +7,39 @@ import { superValidate } from "sveltekit-superforms/server";
 import { number, z } from "zod";
 
 const paramsSchema = z.object({
-  routineId: number().positive(),
-  id: number().positive().nullable(),
+  id: number().positive(),
 });
 
 export async function load({ locals, url, params }) {
-  const session = await locals.getSession();
-  if (!session) {
-    throw redirect(307, "/login");
+  if (!locals.session) {
+    throw redirect(303, "/login");
   }
 
-  const result = paramsSchema.safeParse({
-    routineId: parseInt(params.routineId),
+  const parsedParams = paramsSchema.safeParse({
     id: parseInt(url.searchParams.get("id") ?? ""),
   });
 
-  let isEditMode = false;
-  if (result.success && result.data.id) {
-    isEditMode = true;
-  }
-
-  if (!isEditMode) {
+  if (!parsedParams.success) {
     return {
       form: superValidate(createExerciseSchema),
       exercise: null,
     };
   }
 
-  // @ts-ignore
-  const routineId = result.data.routineId;
-  // @ts-ignore
-  const exerciseId = result.data.id;
-  const userId = session.user.id;
+  const routineId = parseInt(params.routineId);
+  const exerciseId = parsedParams.data.id;
+  const userId = locals.session.user.id;
 
-  // Verify that the routine belongs to the user.
   const routine = await locals.supabase
     .from("routines")
-    .select("id, user_id")
+    .select("*")
     .eq("id", routineId)
-    .eq("user_id", userId)
-    .single();
+    .eq("user_id", userId);
 
-  if (routine.error || routine.data.user_id !== userId) {
-    throw error(401);
+  if (routine.error) {
+    throw error(401, {
+      message: "You don't have access to this exercise",
+    });
   }
 
   const exercise = await locals.supabase
@@ -60,9 +50,7 @@ export async function load({ locals, url, params }) {
     .single();
 
   if (exercise.error) {
-    throw error(404, {
-      message: "Exercise not found",
-    });
+    throw error(404);
   }
 
   return {
@@ -73,13 +61,8 @@ export async function load({ locals, url, params }) {
 
 export const actions = {
   createExercise: async ({ locals, request, params }) => {
-    const session = await locals.getSession();
-    const routineId = parseInt(params.routineId);
-
-    if (!session) {
-      return fail(401, {
-        message: "You must be logged in to create an exercise.",
-      });
+    if (!locals.session) {
+      throw redirect(303, "/login");
     }
 
     const form = await superValidate(request, createExerciseSchema);
@@ -89,23 +72,19 @@ export const actions = {
       });
     }
 
+    const routineId = parseInt(params.routineId);
+    const userId = locals.session.user.id;
+
     const routine = await locals.supabase
       .from("routines")
       .select("id, user_id")
       .eq("id", routineId)
+      .eq("user_id", userId)
       .single();
 
-    if (routine.error) {
-      return fail(500, {
-        message: "Something went wrong! Could not create the exercise",
-        form,
-      });
-    }
-
-    if (!(routine.data.user_id === session.user.id)) {
-      return fail(401, {
-        message: "You don't have access to this resource",
-        form,
+    if (routine.error || !routine.data) {
+      return fail(404, {
+        message: "Routine not found",
       });
     }
 
@@ -114,7 +93,7 @@ export const actions = {
       reps: form.data.reps,
       routine_id: routineId,
       sets: form.data.sets,
-      user_id: session.user.id,
+      user_id: locals.session.user.id,
     });
 
     if (response.error) {
@@ -127,13 +106,8 @@ export const actions = {
     throw redirect(307, `/routines/${routineId}`);
   },
   updateExercise: async ({ locals, request, params }) => {
-    const session = await locals.getSession();
-    const routineId = parseInt(params.routineId);
-
-    if (!session) {
-      return fail(401, {
-        message: "You must be logged in to edit an exercise.",
-      });
+    if (!locals.session) {
+      throw redirect(303, "/login");
     }
 
     const form = await superValidate(request, updateExerciseSchema);
@@ -143,23 +117,19 @@ export const actions = {
       });
     }
 
+    const routineId = parseInt(params.routineId);
+    const userId = locals.session.user.id;
+
     const routine = await locals.supabase
       .from("routines")
       .select("id, user_id")
       .eq("id", routineId)
+      .eq("user_id", userId)
       .single();
 
-    if (routine.error) {
-      return fail(500, {
-        message: "Something went wrong! Could not update the exercise",
-        form,
-      });
-    }
-
-    if (!(routine.data.user_id === session.user.id)) {
-      return fail(401, {
-        message: "You don't have access to this resource",
-        form,
+    if (routine.error || !routine.data) {
+      return fail(404, {
+        message: "Routine not found",
       });
     }
 

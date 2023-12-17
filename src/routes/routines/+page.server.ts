@@ -1,20 +1,18 @@
 import { error, redirect } from "@sveltejs/kit";
 
 export async function load({ locals }) {
-  const session = await locals.getSession();
-
-  if (!session) {
-    throw redirect(307, "/login");
+  if (!locals.session) {
+    throw redirect(303, "/login");
   }
 
-  const { data, error: supabaseError } = await locals.supabase
+  const routines = await locals.supabase
     .from("routines")
     .select("*")
-    .eq("user_id", session.user.id);
+    .eq("user_id", locals.session.user.id);
 
-  if (supabaseError) {
+  if (routines.error) {
     throw error(404);
   }
 
-  return { routines: data };
+  return { routines: routines.data };
 }

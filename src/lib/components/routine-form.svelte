@@ -5,12 +5,24 @@
   import TextArea from "./text-area.svelte";
   import TextInput from "./text-input.svelte";
   import Button from "./button.svelte";
+  import { toast } from "svelte-sonner";
 
   export let data: SuperValidated<InsertRoutine>;
   export let action: "createRoutine" | "updateRoutine";
 
-  const { form, enhance, errors, submitting } = superForm(data, {
+  const { form, enhance, errors, submitting, constraints } = superForm(data, {
     validators: insertRoutineSchema,
+    onResult: (event) => {
+      if (event.result.type === "success") {
+        toast.success("Saved successfully");
+      }
+
+      if (event.result.type === "failure") {
+        toast.error("Something went wrong", {
+          description: "Please try again",
+        });
+      }
+    },
   });
 </script>
 
@@ -26,6 +38,7 @@
     bind:value={$form.name}
     errors={$errors.name}
     placeholder="e.g. Cardio Monday"
+    constraints={$constraints.name}
   />
 
   <TextArea
@@ -34,6 +47,7 @@
     bind:value={$form.goal}
     errors={$errors.goal}
     placeholder="e.g. Improve cardiovascular health."
+    constraints={$constraints.goal}
   />
 
   <div>
