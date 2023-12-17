@@ -47,11 +47,14 @@
             width="32"
             height="32"
             src={data.session.user.user_metadata.avatar_url}
-            alt="Profile picture of {data.session.user.user_metadata.user_name}"
+            class="rounded-full"
+            alt="Profile picture of {data.session.user.user_metadata
+              .user_name ?? data.session.user.user_metadata.name}"
           />
 
           <span class="hidden font-medium sm:block">
-            {data.session.user.user_metadata.user_name}
+            {data.session.user.user_metadata.user_name ??
+              data.session.user.user_metadata.name}
           </span>
         </div>
 

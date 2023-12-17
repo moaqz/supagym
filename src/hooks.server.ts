@@ -26,9 +26,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 
   if (!event.locals.session) {
     const path = event.url.pathname;
-    console.log(
-      `No session found on [Hooks.server.ts] Trying to access path [${path}]`,
-    );
     const isRoutePublic = PUBLIC_ROUTES.includes(path);
 
     if (!isRoutePublic) {
