@@ -3,12 +3,20 @@
   import Footer from "$lib/components/footer.svelte";
 </script>
 
+<svelte:head>
+  <title>Supagym</title>
+  <meta
+    name="description"
+    content="Plan, log, and manage your workout sessions. Keep a detailed record of your exercises to stay motivated and achieve your fitness goals."
+  />
+</svelte:head>
+
 <section class="pt-8">
-  <h1 class="text-4xl font-extrabold tracking-tight">Gym Routine Manager</h1>
+  <h1 class="text-4xl font-extrabold tracking-tight">Gym Routine Tracker</h1>
 
   <p class="text-neutral-300 mt-4 mb-6 balance">
-    An application designed to simplify your gym routine. Plan, track, and
-    manage your exercises with ease.
+    Plan, log, and manage your workout sessions. Keep a detailed record of your
+    exercises to stay motivated and achieve your fitness goals.
   </p>
 
   <Button href="/login">Get Started</Button>
