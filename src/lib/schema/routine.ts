@@ -18,7 +18,7 @@ export const insertRoutineSchema = z.object({
     .string()
     .trim()
     .max(400, {
-      message: "Routine goal exceeds the maximum length of 400 characters.",
+      message: "Routine goal cannot exceed 400 characters",
     })
     .nullable(),
 });
