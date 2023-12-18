@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS "exercise_logs" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"exercise_id" integer NOT NULL REFERENCES "exercises"("id"),
 	"routine_id" integer NOT NULL REFERENCES "routines"("id"),
-	"createdAt" timestamp with time zone DEFAULT now()
+	"createdAt" timestamp with time zone NOT NULL DEFAULT now()
 );
 
 CREATE INDEX IF NOT EXISTS "exercises_routine_idx" ON "exercises" ("routine_id");

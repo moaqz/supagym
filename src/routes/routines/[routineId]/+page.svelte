@@ -19,7 +19,7 @@
   </div>
 
   <div class="flex shrink-0 gap-3">
-    <Button href="/routines/{data.routine.id}/logs">Exercise logs</Button>
+    <Button href="/routines/{data.routine.id}/logs">Workout logs</Button>
     <Button href="/routines/{data.routine.id}/edit">Edit routine</Button>
   </div>
 </div>

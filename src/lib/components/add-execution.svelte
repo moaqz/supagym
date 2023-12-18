@@ -4,6 +4,7 @@
   import { toast } from "svelte-sonner";
 
   export let exercise: Exercise;
+  let submitting = false;
 </script>
 
 <form
@@ -11,6 +12,7 @@
   action="?/addExecution"
   use:enhance={() => {
     return async ({ update, result }) => {
+      submitting = true;
       await update();
 
       if (result.type === "success") {
@@ -22,6 +24,8 @@
           description: "Please try again later.",
         });
       }
+
+      submitting = false;
     };
   }}
 >
@@ -30,6 +34,7 @@
 
   <button
     type="submit"
+    disabled={submitting}
     class="flex h-8 w-28 items-center justify-center rounded-md hover:bg-neutral-800 hover:transition-colors"
   >
     Log exercise

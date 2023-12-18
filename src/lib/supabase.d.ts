@@ -36,19 +36,19 @@ export interface Database {
     Tables: {
       exercise_logs: {
         Row: {
-          createdAt: string | null
+          createdAt: string
           exercise_id: number
           id: number
           routine_id: number
         }
         Insert: {
-          createdAt?: string | null
+          createdAt?: string
           exercise_id: number
           id?: number
           routine_id: number
         }
         Update: {
-          createdAt?: string | null
+          createdAt?: string
           exercise_id?: number
           id?: number
           routine_id?: number
