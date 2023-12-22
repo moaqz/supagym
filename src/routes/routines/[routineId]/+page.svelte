@@ -1,7 +1,7 @@
 <script lang="ts">
-  import Button from "$lib/components/button.svelte";
-  import EmptyState from "$lib/components/empty-state.svelte";
-  import ExerciseCard from "$lib/components/exercise-card.svelte";
+  import { Button } from "$lib/components/ui/button";
+  import { EmptyState } from "$lib/components/common";
+  import { ExerciseCard, CreateExerciseModal } from "$lib/components/exercises";
   import type { PageData } from "./$types";
 
   export let data: PageData;
@@ -14,12 +14,14 @@
     <h1 class="text-2xl font-semibold tracking-tight">{data.routine?.name}</h1>
 
     {#if data.routine?.goal}
-      <p class="pretty text-neutral-300">{data.routine.goal}</p>
+      <p class="pretty">{data.routine.goal}</p>
     {/if}
   </div>
 
   <div class="flex shrink-0 gap-3">
-    <Button href="/routines/{data.routine.id}/logs">Workout logs</Button>
+    <Button variant="outline" href="/routines/{data.routine.id}/logs">
+      Workout logs
+    </Button>
     <Button href="/routines/{data.routine.id}/edit">Edit routine</Button>
   </div>
 </div>
@@ -31,15 +33,13 @@
     {/each}
 
     <div
-      class="grid w-full place-content-center rounded-lg border border-dashed border-neutral-700 p-8"
+      class="grid w-full place-content-center rounded-lg border border-dashed p-8"
     >
-      <Button href="/routines/{data.routine.id}/exercises/edit">
-        Create exercise
-      </Button>
+      <CreateExerciseModal form={data.createExerciseForm} />
     </div>
   </div>
 {:else}
   <EmptyState title="No exercises" description="Create your first exercise">
-    <Button href="/routines/{data.routine.id}/exercises/edit">Create</Button>
+    <CreateExerciseModal form={data.createExerciseForm} />
   </EmptyState>
 {/if}

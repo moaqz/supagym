@@ -2,8 +2,11 @@
   import "../app.css";
   import { goto, invalidate } from "$app/navigation";
   import { onMount } from "svelte";
-  import Button from "$lib/components/button.svelte";
+  import { Button } from "$lib/components/ui/button";
+  import { ModeToggler } from "$lib/components/common";
   import { Toaster } from "svelte-sonner";
+  import { ModeWatcher } from "mode-watcher";
+  import { Github } from "lucide-svelte";
 
   export let data;
   $: ({ supabase, session } = data);
@@ -34,9 +37,7 @@
   />
 </svelte:head>
 
-<div
-  class="mx-auto min-h-screen max-w-2xl border-x border-x-neutral-800 bg-dark px-4 text-white shadow-md md:px-8"
->
+<div class="mx-auto min-h-screen max-w-2xl border-x px-4 shadow-md md:px-8">
   <header class="mb-8 flex h-20 items-center justify-between">
     <a href="/" class="text-xl font-bold">Supagym</a>
 
@@ -47,7 +48,6 @@
             width="32"
             height="32"
             src={data.session.user.user_metadata.avatar_url}
-            class="rounded-full"
             alt="Profile picture of {data.session.user.user_metadata
               .user_name ?? data.session.user.user_metadata.name}"
           />
@@ -66,14 +66,16 @@
         <a href="/login" class="font-semibold hover:underline"> Login </a>
         <span>|</span>
         <a href="https://github.com/moaqz/supagym" target="_blank">
-          <img src="/github-mark-white.svg" alt="Github Logo" class="h-5 w-5" />
+          <Github size={20} />
         </a>
       {/if}
+      <ModeToggler />
     </div>
   </header>
 
   <main>
     <slot />
     <Toaster richColors closeButton />
+    <ModeWatcher />
   </main>
 </div>

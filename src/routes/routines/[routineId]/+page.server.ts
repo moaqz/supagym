@@ -1,13 +1,15 @@
-import { deleteExerciseSchema } from "$lib/schema/exercise";
-import { createExerciseLogSchema } from "$lib/schema/exercise-log";
+import { createExerciseSchema } from "$lib/schema/exercise.js";
 import { error, fail, redirect } from "@sveltejs/kit";
+import { superValidate } from "sveltekit-superforms/server";
 import { z } from "zod";
 
 const searchParamsSchema = z.object({
   routineId: z.coerce.number().positive(),
 });
 
-export async function load({ locals, params }) {
+export async function load({ locals, params, depends }) {
+  depends("supagym:exercises");
+
   if (!locals.session) {
     throw redirect(303, "/login");
   }
@@ -46,96 +48,54 @@ export async function load({ locals, params }) {
   return {
     routine: routine.data,
     exercises: exercises.data,
+    createExerciseForm: await superValidate(createExerciseSchema),
   };
 }
 
 export const actions = {
-  deleteExercise: async ({ locals, request, params }) => {
+  createExercise: async ({ locals, request, params }) => {
     if (!locals.session) {
       throw redirect(303, "/login");
     }
 
-    const exerciseId = (await request.formData()).get("exerciseId");
-    if (!exerciseId || exerciseId instanceof File) {
-      return fail(400);
-    }
-
-    const form = deleteExerciseSchema.safeParse({
-      routineId: parseInt(params.routineId),
-      exerciseId: parseInt(exerciseId),
-    });
-
-    if (!form.success) {
+    const form = await superValidate(request, createExerciseSchema);
+    if (!form.valid) {
       return fail(400, {
-        message: "Missing required fields",
+        form,
       });
     }
+
+    const routineId = parseInt(params.routineId);
+    const userId = locals.session.user.id;
 
     const routine = await locals.supabase
       .from("routines")
       .select("id, user_id")
-      .eq("id", form.data.routineId)
-      .eq("user_id", locals.session.user.id)
+      .eq("id", routineId)
+      .eq("user_id", userId)
       .single();
 
-    if (routine.error) {
-      return fail(404);
-    }
-
-    const response = await locals.supabase
-      .from("exercises")
-      .delete()
-      .eq("id", form.data.exerciseId);
-
-    if (response.error) {
-      return fail(500, {
-        messsage: "Failed to delete the exercise. Please try again later",
-      });
-    }
-
-    return { success: true };
-  },
-  addExecution: async ({ locals, request }) => {
-    if (!locals.session) {
-      throw redirect(303, "/login");
-    }
-
-    const formData = await request.formData();
-    const form = createExerciseLogSchema.safeParse({
-      // @ts-ignore
-      routineId: parseInt(formData.get("routineId")),
-      // @ts-ignore
-      exerciseId: parseInt(formData.get("exerciseId")),
-    });
-
-    if (!form.success) {
-      return fail(400);
-    }
-
-    const routine = await locals.supabase
-      .from("routines")
-      .select("*")
-      .eq("user_id", locals.session.user.id)
-      .eq("id", form.data.routineId)
-      .single();
-
-    if (routine.error) {
+    if (routine.error || !routine.data) {
       return fail(404, {
         message: "Routine not found",
       });
     }
 
-    const { error } = await locals.supabase.from("exercise_logs").insert({
-      exercise_id: form.data.exerciseId,
-      routine_id: form.data.routineId,
+    const response = await locals.supabase.from("exercises").insert({
+      name: form.data.name,
+      reps: form.data.reps,
+      routine_id: routineId,
+      sets: form.data.sets,
+      user_id: locals.session.user.id,
     });
 
-    if (error) {
+    if (response.error) {
       return fail(500, {
-        message: "Failed to log exercise completion. Please try again later.",
+        message: "Something went wrong! Could not create the exercise",
+        form,
       });
     }
 
-    return { success: true };
+    throw redirect(307, `/routines/${routineId}`);
   },
 };

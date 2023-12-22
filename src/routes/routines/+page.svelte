@@ -1,7 +1,6 @@
 <script lang="ts">
-  import Button from "$lib/components/button.svelte";
-  import EmptyState from "$lib/components/empty-state.svelte";
-  import RoutineCard from "$lib/components/routine-card.svelte";
+  import EmptyState from "$lib/components/common/empty-state.svelte";
+  import { CreateRoutineModal, RoutineCard } from "$lib/components/routines";
 
   export let data;
 </script>
@@ -9,10 +8,10 @@
 <div class="mb-6 flex items-center justify-between">
   <div>
     <h1 class="text-2xl font-semibold tracking-tight">Routines</h1>
-    <p class="text-neutral-300">Overview of all your routines.</p>
+    <p>Overview of all your routines.</p>
   </div>
 
-  <Button href="/routines/new">Create</Button>
+  <CreateRoutineModal routineForm={data.routineForm} />
 </div>
 
 <div>
@@ -25,14 +24,14 @@
       {/each}
 
       <li
-        class="grid w-full place-content-center rounded-lg border border-dashed border-neutral-700 p-8"
+        class="grid w-full place-content-center rounded-lg border border-dashed p-8"
       >
-        <Button href="/routines/new">Create routine</Button>
+        <CreateRoutineModal routineForm={data.routineForm} />
       </li>
     </ul>
   {:else}
     <EmptyState title="No routines" description="Create your first routine">
-      <Button href="/routines/new">Create</Button>
+      <CreateRoutineModal routineForm={data.routineForm} />
     </EmptyState>
   {/if}
 </div>
