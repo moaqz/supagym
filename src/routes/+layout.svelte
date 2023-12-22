@@ -50,6 +50,7 @@
             src={data.session.user.user_metadata.avatar_url}
             alt="Profile picture of {data.session.user.user_metadata
               .user_name ?? data.session.user.user_metadata.name}"
+            class="rounded-full"
           />
 
           <span class="hidden font-medium sm:block">
