@@ -83,7 +83,19 @@
   * {
     @apply border-border;
   }
+
   body {
-    @apply bg-background text-foreground;
+    background-image: radial-gradient(
+        hsl(var(--foreground) / 0.2) 2px,
+        transparent 2px
+      ),
+      radial-gradient(
+        hsl(var(--background) / 1) 2px,
+        hsl(var(--background)) 2px
+      );
+    background-size: 80px 80px;
+    background-position:
+      0 0,
+      40px 40px;
   }
 }

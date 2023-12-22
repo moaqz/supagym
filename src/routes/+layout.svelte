@@ -37,7 +37,7 @@
   />
 </svelte:head>
 
-<div class="mx-auto min-h-screen max-w-2xl border-x px-4 shadow-md md:px-8">
+<div class="mx-auto min-h-screen max-w-2xl border-x px-4 shadow-md bg-background text-foreground md:px-8">
   <header class="mb-8 flex h-20 items-center justify-between">
     <a href="/" class="text-xl font-bold">Supagym</a>
 
