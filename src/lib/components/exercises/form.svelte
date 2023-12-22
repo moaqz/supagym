@@ -16,7 +16,7 @@
   export let action: "createExercise" | "updateExercise";
   export let onSuccess: () => void = () => {};
 
-  const { form, enhance, errors, submitting } = superForm(data, {
+  const { form, enhance, errors, submitting, constraints } = superForm(data, {
     validators:
       action === "createExercise" ? createExerciseSchema : updateExerciseSchema,
     onResult(event) {
@@ -49,6 +49,7 @@
     placeholder="Bench press"
     bind:value={$form.name}
     errors={$errors.name}
+    constraints={$constraints.name}
   />
 
   <NumberFormField
@@ -57,6 +58,7 @@
     name="sets"
     bind:value={$form.sets}
     errors={$errors.sets}
+    constraints={$constraints.sets}
   />
 
   <NumberFormField
@@ -65,6 +67,7 @@
     name="reps"
     bind:value={$form.reps}
     errors={$errors.reps}
+    constraints={$constraints.sets}
   />
 
   <div>

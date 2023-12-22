@@ -5,7 +5,7 @@
   import { Label } from "$lib/components/ui/label";
   import { PlusIcon, MinusIcon } from "lucide-svelte";
 
-  export let value: string | number;
+  export let value: number;
   export let label: string | undefined = undefined;
   export let errors: string[] | undefined = undefined;
   export let constraints: InputConstraint | undefined = undefined;
@@ -19,6 +19,11 @@
   function decrement() {
     const newValue = (Number(value) || 0) - step;
     value = newValue >= 0 ? newValue : value;
+  }
+
+  function onInput(event: InputEvent) {
+    const el = event.target as HTMLInputElement;
+    value = Number(el.value);
   }
 </script>
 
@@ -36,6 +41,7 @@
       min="0"
       aria-invalid={errors ? "true" : undefined}
       bind:value
+      on:input={onInput}
       {...constraints}
       {...$$restProps}
     />

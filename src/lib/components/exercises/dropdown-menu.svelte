@@ -22,14 +22,14 @@
     });
 
     if (!response.ok) {
-      toast.error("Failed to log exercise completion", {
+      toast.error("Failed to log workout completion", {
         description:
-          "There was an issue logging your exercise completion. Please try again later.",
+          "There was an issue logging your workout completion. Please try again later.",
       });
       return;
     }
 
-    toast.success("Exercise completion logged successfully!");
+    toast.success("Workout completion logged successfully!");
     invalidate("supagym:exercises");
   }
 
@@ -63,7 +63,7 @@
     <DropdownMenu.Content align="end">
       <DropdownMenu.Group>
         <DropdownMenu.Item on:click={recordExercise}>
-          Record exercise
+          Record Workout
         </DropdownMenu.Item>
         <DropdownMenu.Item
           href="/routines/{exercise.routine_id}/exercises/edit?id={exercise.id}"

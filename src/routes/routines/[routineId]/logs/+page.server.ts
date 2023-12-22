@@ -1,6 +1,8 @@
 import { error, redirect } from "@sveltejs/kit";
 
-export async function load({ locals, params }) {
+export async function load({ locals, params, url, depends }) {
+  depends("supagym:logs")
+
   if (!locals.session) {
     throw redirect(303, "/login");
   }
@@ -19,6 +21,13 @@ export async function load({ locals, params }) {
     });
   }
 
+  let page = Number(url.searchParams.get("page")) || 1
+  if (page < 1) {
+    page = 1
+  }
+  const take = 8
+  const skip = (page - 1) * take
+
   const exerciseLogs = await locals.supabase
     .from("exercise_logs")
     .select(
@@ -30,9 +39,11 @@ export async function load({ locals, params }) {
         name
       )
     `,
+      { count: "exact" }
     )
     .eq("routine_id", routineId)
-    .order("createdAt", { ascending: false });
+    .order("createdAt", { ascending: false })
+    .range(skip, skip + take - 1);
 
   if (exerciseLogs.error) {
     throw error(404, {
@@ -40,8 +51,11 @@ export async function load({ locals, params }) {
     });
   }
 
+  const pageCount = exerciseLogs.count ? Math.ceil(exerciseLogs.count / take) : 0
+
   return {
     routine: routine.data,
     exerciseLogs: exerciseLogs.data,
+    totalPages: pageCount,
   };
 }
