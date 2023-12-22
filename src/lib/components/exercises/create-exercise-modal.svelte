@@ -20,8 +20,8 @@
 
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>Routine</Dialog.Title>
-      <Dialog.Description>Create your routine</Dialog.Description>
+      <Dialog.Title>Exercise</Dialog.Title>
+      <Dialog.Description>Create your exercise</Dialog.Description>
     </Dialog.Header>
 
     <ExerciseForm data={form} action="createExercise" onSuccess={closeDialog} />
